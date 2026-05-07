@@ -1,0 +1,281 @@
+[
+  {
+    "name": "companion_get_persona",
+    "title": "Get companion persona",
+    "description": "Use this when a companion conversation starts or when the user asks what persona is active.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {},
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "companion_update_persona",
+    "title": "Update companion persona",
+    "description": "Use this when the user explicitly asks to change the companion persona, tone, boundaries, or relationship style.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "patch": {
+          "type": "object",
+          "description": "JSON object to merge into the current persona.",
+          "additionalProperties": true
+        },
+        "replace": {
+          "type": "boolean",
+          "description": "Replace the whole persona instead of deep-merging the patch.",
+          "default": false
+        }
+      },
+      "required": [
+        "patch"
+      ],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "companion_save_memory",
+    "title": "Save companion memory",
+    "description": "Use this when the user says to remember something, or after an opted-in companion chat needs a compact summary.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "content": {
+          "type": "string",
+          "description": "The memory to store."
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "profile",
+            "preference",
+            "relationship",
+            "episode",
+            "boundary",
+            "pinned"
+          ],
+          "default": "profile"
+        },
+        "summary": {
+          "type": "string",
+          "default": ""
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "sensitivity": {
+          "type": "string",
+          "enum": [
+            "public",
+            "private",
+            "sensitive"
+          ],
+          "default": "private"
+        },
+        "source": {
+          "type": "string",
+          "default": ""
+        },
+        "pinned": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "required": [
+        "content"
+      ],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "companion_search_memories",
+    "title": "Search companion memories",
+    "description": "Use this to recall relevant stored preferences, relationship notes, and episode summaries for the current conversation.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "default": ""
+        },
+        "kinds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "profile",
+              "preference",
+              "relationship",
+              "episode",
+              "boundary",
+              "pinned"
+            ]
+          },
+          "default": []
+        },
+        "include_sensitive": {
+          "type": "boolean",
+          "default": false
+        },
+        "include_deleted": {
+          "type": "boolean",
+          "default": false
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "default": 12
+        }
+      },
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "companion_list_memories",
+    "title": "List companion memories",
+    "description": "Use this when the user asks what is remembered about them.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "include_sensitive": {
+          "type": "boolean",
+          "default": false
+        },
+        "include_deleted": {
+          "type": "boolean",
+          "default": false
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "default": 25
+        }
+      },
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "companion_forget_memory",
+    "title": "Forget companion memory",
+    "description": "Use this when the user asks to forget memories. Call with dry_run=true first unless the user already gave a specific memory id and explicit deletion intent.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "memory_id": {
+          "type": "string",
+          "default": ""
+        },
+        "query": {
+          "type": "string",
+          "default": ""
+        },
+        "kind": {
+          "type": "string",
+          "default": ""
+        },
+        "dry_run": {
+          "type": "boolean",
+          "default": true
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "default": 20
+        }
+      },
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "companion_record_exchange",
+    "title": "Record companion exchange",
+    "description": "Use this only when raw exchange logging is explicitly enabled; prefer companion_save_memory with a compact episode summary.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "user_message": {
+          "type": "string",
+          "default": ""
+        },
+        "assistant_message": {
+          "type": "string",
+          "default": ""
+        },
+        "summary": {
+          "type": "string",
+          "default": ""
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        }
+      },
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "companion_export",
+    "title": "Export companion memory",
+    "description": "Use this when the user asks to inspect or export the local companion memory data.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "include_sensitive": {
+          "type": "boolean",
+          "default": false
+        },
+        "include_deleted": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "openWorldHint": false
+    }
+  }
+]

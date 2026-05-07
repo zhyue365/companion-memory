@@ -1,0 +1,20 @@
+{
+  "name": "local-relationship-memory-plugins",
+  "interface": {
+    "displayName": "Local Relationship Memory Plugins"
+  },
+  "plugins": [
+    {
+      "name": "companion-memory",
+      "source": {
+        "source": "local",
+        "path": "./plugins/companion-memory"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

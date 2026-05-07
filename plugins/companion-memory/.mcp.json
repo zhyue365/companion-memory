@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "companion-memory": {
+      "command": "python3",
+      "args": [
+        "./scripts/companion_memory_server.py"
+      ],
+      "cwd": "."
+    }
+  }
+}

@@ -1,0 +1,12 @@
+interface:
+  display_name: "AI Relationship Memory"
+  short_description: "Persist local personas and relationship memories"
+  icon_small: "../../assets/icon.svg"
+  icon_large: "../../assets/icon.svg"
+  default_prompt: "Use my local relationship persona and memories for this conversation."
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "companion-memory"
+      description: "Local SQLite-backed relationship persona and memory tools"

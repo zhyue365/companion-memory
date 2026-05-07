@@ -1,0 +1,47 @@
+{
+  "name": "companion-memory",
+  "version": "0.1.0",
+  "description": "Local-first AI relationship memory for Codex personas, preferences, boundaries, and shared context.",
+  "author": {
+    "name": "Local User",
+    "email": "local@example.com",
+    "url": "https://example.local/"
+  },
+  "homepage": "https://github.com/your-name/companion-memory",
+  "repository": "https://github.com/your-name/companion-memory",
+  "license": "MIT",
+  "keywords": [
+    "codex",
+    "memory",
+    "persona",
+    "companion",
+    "relationship",
+    "sqlite"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "AI Relationship Memory",
+    "shortDescription": "Local-first memory for AI relationships",
+    "longDescription": "AI Relationship Memory gives Codex a local-first relationship memory layer for persistent AI personas. It stores editable personas, user preferences, consent boundaries, relationship notes, and compact episode summaries in a local SQLite database. Tools are provided for saving, searching, exporting, and forgetting memories, with sensitive memories excluded from normal recall unless explicitly requested.",
+    "developerName": "Local Plugin",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive",
+      "Write",
+      "Local Storage"
+    ],
+    "websiteURL": "https://github.com/your-name/companion-memory",
+    "privacyPolicyURL": "https://github.com/your-name/companion-memory#privacy-model",
+    "termsOfServiceURL": "https://github.com/your-name/companion-memory#safety-boundaries",
+    "defaultPrompt": [
+      "Remember this preference locally.",
+      "List what you remember about me.",
+      "Show my current relationship persona."
+    ],
+    "brandColor": "#E11D48",
+    "composerIcon": "./assets/icon.svg",
+    "logo": "./assets/icon.svg",
+    "screenshots": []
+  }
+}

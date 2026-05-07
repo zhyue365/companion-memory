@@ -1,0 +1,12 @@
+.pycache/
+__pycache__/
+*.py[cod]
+.DS_Store
+.plugin-eval/
+node_modules/
+build/
+checks.json
+
+plugins/companion-memory/data/*.sqlite3
+plugins/companion-memory/data/*.sqlite3-shm
+plugins/companion-memory/data/*.sqlite3-wal

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Companion Memory icon">
+  <rect width="128" height="128" rx="28" fill="#fff1f2"/>
+  <path d="M64 95c-3.1-2.9-8-6.7-14.6-11.5C35.5 73.3 27 64.4 27 51.8 27 41.7 34.8 34 44.8 34c7.4 0 13.5 4.1 16.9 10.2C65.1 38.1 71.2 34 78.6 34 88.6 34 96 41.7 96 51.8c0 12.6-8.1 21.5-22.1 31.7C67.7 88.1 64 91.7 64 95z" fill="#e11d48"/>
+  <circle cx="49" cy="55" r="4.5" fill="#fff"/>
+  <circle cx="79" cy="55" r="4.5" fill="#fff"/>
+  <path d="M52 68c4.7 4.9 19.3 4.9 24 0" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+  <path d="M32 101h64" stroke="#be123c" stroke-width="8" stroke-linecap="round" opacity=".35"/>
+</svg>
