@@ -12,8 +12,10 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from companion_store import (  # noqa: E402
     forget_memory,
     get_persona,
+    rebuild_search_indexes_for_path,
     save_memory,
     search_memories,
+    search_index_stats,
     update_persona,
 )
 
@@ -53,6 +55,34 @@ class CompanionStoreTests(unittest.TestCase):
         self.assertEqual(len(results), 1)
         self.assertEqual(results[0]["id"], saved["id"])
         self.assertTrue(results[0]["pinned"])
+
+    def test_search_indexes_are_built_and_migrated(self) -> None:
+        save_memory("用户正在推进毕业求职简历。", kind="episode", path=self.db_path)
+        save_memory("AI 关系记忆插件使用 SQLite 和 MCP。", kind="relationship", path=self.db_path)
+
+        stats = search_index_stats(self.db_path)
+
+        self.assertTrue(stats["fts5_available"])
+        self.assertEqual(stats["memories"], 2)
+        self.assertEqual(stats["fts_rows"], 2)
+        self.assertEqual(stats["vector_rows"], 2)
+
+        rebuilt = rebuild_search_indexes_for_path(self.db_path)
+        self.assertEqual(rebuilt["memories_indexed"], 2)
+        self.assertEqual(rebuilt["vector_rows"], 2)
+
+    def test_semantic_vector_search_finds_related_memory(self) -> None:
+        saved = save_memory(
+            "接下来重点任务：陪张瀚跃推进毕业求职，改简历、打磨项目、明确岗位、安排投递和面试复盘。",
+            kind="pinned",
+            tags=["job-search", "resume"],
+            pinned=True,
+            path=self.db_path,
+        )
+
+        results = search_memories("简历 offer 面试", path=self.db_path)
+
+        self.assertEqual(results[0]["id"], saved["id"])
 
     def test_sensitive_memories_are_hidden_by_default(self) -> None:
         save_memory("普通偏好", path=self.db_path)

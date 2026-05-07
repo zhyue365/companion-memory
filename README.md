@@ -10,7 +10,7 @@
 
 它适合长期助手、AI 伴侣人格、创作型角色、教练、导师，或任何需要记住用户偏好、边界、共享上下文和对话摘要的 AI agent。所有记忆默认写入本地 SQLite 数据库，不需要托管数据库。
 
-底层很朴素：一个 Codex skill、一个轻量 MCP server、一个本地 SQLite 数据库。
+底层很朴素：一个 Codex skill、一个轻量 MCP server、一个带 FTS5 全文索引和本地向量表的 SQLite 数据库。
 
 ## 为什么做这个
 
@@ -20,7 +20,7 @@
 - **记忆 Memory**：用户明确允许 AI 记住什么。
 - **聊天全文 Transcript**：对话里发生过的一切。
 
-这个插件把它们分开。它默认保存紧凑、可编辑的记忆，而不是囤积原始聊天全文；敏感记忆默认不会被普通检索召回；遗忘也被设计成一等功能。
+这个插件把它们分开。它默认保存紧凑、可编辑的记忆，而不是囤积原始聊天全文；敏感记忆默认不会被普通检索召回；遗忘也被设计成一等功能。检索层同时使用 SQLite FTS5 和本地哈希 n-gram embedding，保持单文件、本地优先和低运维。
 
 ## 快速开始
 
@@ -77,6 +77,11 @@ plugins/companion-memory/data/companion_memory.sqlite3
 
 这个数据库文件已被 Git 忽略，不会被默认提交。
 
+数据库会自动维护两类检索索引：
+
+- `memory_fts`：SQLite FTS5 全文索引，用于关键词和全文召回。
+- `memory_vectors`：本地向量表，使用 `local-hash-ngram-v1` 保存轻量 embedding，用于语义相似召回。
+
 支持的记忆类型：
 
 - `profile`：关于用户的稳定事实。
@@ -89,6 +94,7 @@ plugins/companion-memory/data/companion_memory.sqlite3
 ## 隐私模型
 
 - **本地优先**：插件写入当前 workspace 下的 SQLite 数据库。
+- **单文件检索**：FTS5 索引和向量 embedding 都保存在同一个 SQLite 文件中。
 - **无外部服务**：MCP server 不调用网络 API。
 - **默认不存聊天全文**：优先保存紧凑摘要。
 - **敏感记忆默认不召回**：`sensitive` 记忆不会出现在普通搜索里。
@@ -124,6 +130,12 @@ python3 plugins/companion-memory/scripts/run_checks.py
 
 这个脚本会校验 JSON、编译 Python 源码、运行单元测试、检查 demo GIF，并对 MCP stdio server 做烟测。
 
+重建或查看全文/向量索引：
+
+```bash
+python3 plugins/companion-memory/scripts/companion_store.py --rebuild-search-index --print-search-stats
+```
+
 只运行单元测试：
 
 ```bash
@@ -156,7 +168,7 @@ MIT
 
 It is designed for long-running assistants, companion personas, creative roleplay partners, coaches, tutors, or any AI agent that should remember preferences, boundaries, shared context, and compact episode summaries. Memories are stored in a local SQLite database by default, with no hosted database required.
 
-The project is deliberately simple under the hood: a Codex skill, a small MCP server, and a local SQLite database.
+The project is deliberately simple under the hood: a Codex skill, a small MCP server, and a local SQLite database with FTS5 full-text search plus a local vector table.
 
 ## Why This Exists
 
@@ -166,7 +178,7 @@ Many AI persona projects blur together three things that should stay separate:
 - **Memory**: what the user explicitly allowed it to remember.
 - **Transcript**: everything that happened in chat.
 
-This plugin keeps those layers separate. It defaults to compact, editable memories instead of raw transcript hoarding, excludes sensitive memories from normal recall, and makes forgetting a first-class operation.
+This plugin keeps those layers separate. It defaults to compact, editable memories instead of raw transcript hoarding, excludes sensitive memories from normal recall, and makes forgetting a first-class operation. Search combines SQLite FTS5 with a local hash n-gram embedding model, keeping retrieval single-file, local-first, and low-ops.
 
 ## Quick Start
 
@@ -223,6 +235,11 @@ plugins/companion-memory/data/companion_memory.sqlite3
 
 This database file is ignored by Git and is not committed by default.
 
+The database automatically maintains two retrieval indexes:
+
+- `memory_fts`: a SQLite FTS5 full-text index for keyword and full-text recall.
+- `memory_vectors`: a local vector table using `local-hash-ngram-v1` lightweight embeddings for semantic recall.
+
 Supported memory kinds:
 
 - `profile`: stable facts about the user.
@@ -235,6 +252,7 @@ Supported memory kinds:
 ## Privacy Model
 
 - **Local-first**: the plugin writes to a SQLite database under this workspace.
+- **Single-file retrieval**: FTS5 indexes and vector embeddings live in the same SQLite file.
 - **No external service**: the MCP server does not call network APIs.
 - **No raw transcript storage by default**: compact summaries are preferred.
 - **Sensitive recall is opt-in**: `sensitive` memories are hidden from normal search.
@@ -269,6 +287,12 @@ python3 plugins/companion-memory/scripts/run_checks.py
 ```
 
 That script validates JSON files, compiles Python sources, runs unit tests, checks the generated demo GIF, and smoke-tests the MCP stdio server.
+
+Rebuild or inspect the full-text/vector indexes:
+
+```bash
+python3 plugins/companion-memory/scripts/companion_store.py --rebuild-search-index --print-search-stats
+```
 
 You can also run only the unit tests:
 

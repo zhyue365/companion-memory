@@ -5,7 +5,7 @@ description: Use when the user wants local-first AI relationship memory, persist
 
 # AI Relationship Memory
 
-Use the `companion-memory` MCP tools to give Codex a local-first AI relationship memory layer. The plugin stores an editable persona plus compact memories in `plugins/companion-memory/data/companion_memory.sqlite3`.
+Use the `companion-memory` MCP tools to give Codex a local-first AI relationship memory layer. The plugin stores an editable persona plus compact memories in `plugins/companion-memory/data/companion_memory.sqlite3`. The same SQLite file also maintains an FTS5 table (`memory_fts`) and a local vector table (`memory_vectors`) so recall can combine metadata filters, keyword/full-text search, and lightweight semantic similarity without an external service.
 
 ## Core Workflow
 
